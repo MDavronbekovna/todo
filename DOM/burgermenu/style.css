@@ -1,0 +1,144 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap');
+
+:root {
+    --primary-color: #FFBA00;
+    --body-font: "Montserrat", sans-serif;
+    --text-color: #111;
+    --accent-text-color: #fff;
+    --background-color: #FFF;
+}
+
+body {
+    padding: 0;
+    margin: 0;
+    font-family: var(--body-font);
+    background-color: var(--background-color);
+    color: var(--text-color);
+}
+
+.container {
+    width: 85%;
+    margin: 0 auto;
+    max-width: 1280px;
+}
+
+.nav_flex {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+nav {
+    color: var(--accent-text-color);
+    background-color: var(--primary-color);
+    padding-block: 10px;
+}
+
+
+nav .logo span{
+    text-transform: uppercase;
+    font-size: 1.4rem;
+    font-weight: 500;
+}
+
+menu {
+    padding: 0;
+    margin: 0;
+}
+
+menu .menu_flex {
+    display: flex;
+    justify-content: space-between;
+    column-gap: 10px;
+    align-items: center;
+}
+
+menu .item a {
+    display: block;
+    text-decoration: none;
+    color: var(--accent-text-color);
+    padding: 8px 12px;
+    border: 1px solid transparent;
+    border-radius: 10px;
+    transition: .3s;
+}
+
+menu .item a:hover {
+    border-color: var(--accent-text-color);
+}
+
+#open_btn {
+    border: 1px solid var(--accent-text-color);
+    background-color: transparent;
+    color: var(--accent-text-color);
+    padding: 5px 7px;
+    font-size: 1.3rem;
+    display: none;
+    cursor: pointer;
+    transition: .3s;
+}
+
+#open_btn:hover {
+    background-color: var(--accent-text-color);
+    color: var(--primary-color);
+}
+
+#close_btn {
+    display: none;
+    border: 0;
+    background: transparent;
+    font-size: 1.6rem;
+    color: var(--accent-text-color);
+    cursor: pointer;
+}
+
+.text-end {
+    text-align: end;
+}
+
+#menu_container {
+    display: none;
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    right: 0;
+    left: 0;
+}
+
+@media screen and (max-width: 762px) {
+    menu {
+        position: fixed;
+        right: -100%;
+        top: 0;
+        bottom: 0;
+        background-color: rgba(1, 1, 1, .5);
+        backdrop-filter: blur(2px);
+        width: 70%;
+        padding: 10px 40px;
+        transition: .25s linear;
+    }
+
+    menu.active {
+        right: 0;
+    }
+
+    menu .menu_flex {
+        flex-direction: column;
+        padding-block: 40px;
+        justify-content: space-evenly;
+        height: 98vh;
+    }
+
+    #open_btn {
+        display: inline;
+    }
+
+    #close_btn {
+        display: inline;
+    }
+
+    #menu_container.active {
+        display: block;
+    }
+
+}

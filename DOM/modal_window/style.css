@@ -1,0 +1,57 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap');
+
+body {
+    margin: 0;
+    padding: 0;
+    font-family: "Montserrat", sans-serif;
+}
+
+.container {
+    width: 90%;
+    max-width: 1280px;
+    margin: 0 auto;
+}
+
+.text-end {
+    text-align: end;
+}
+
+.modal_container .modal_backdrop {
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    right: 0;
+    left: 0;
+    backdrop-filter: blur(4px);
+    background-color: rgba(0, 0, 0, .5);
+    opacity: 0;
+    z-index: -1;
+    transition: .25s linear;
+}
+
+.modal_container .modal_card {
+    position: fixed;
+    top: 0;
+    right: 0;
+    left: 0;
+    bottom: 10px;
+    z-index: 100;
+    height: fit-content;
+    background-color: #fff;
+    max-width: 400px;
+    margin: auto;
+    border-radius: 25px;
+    padding: 15px;
+    transform: scale(0);
+    transition: .25s linear;
+}
+
+
+.modal_container.active .modal_backdrop {
+    z-index: 99;
+    opacity: 1;
+}
+
+.modal_container.active .modal_card {
+    transform: scale(1);
+}
