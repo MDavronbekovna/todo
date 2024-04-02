@@ -39,12 +39,15 @@ class TodoListManger {
                 <td><input type="checkbox" data-todo-id="${todoItem.id}" class="todoIsFinishedCheckbox" ${todoItem.isFinished ? 'checked' : ''}></td>
                 <td class="text-end">
                     <button data-todo-id="${todoItem.id}" class="btn btn-danger delete-todo-item"><i class="fa-solid fa-trash"></i></button>
-                    <button data-todo-id="${todoItem.id}" class="btn btn-warning"><i class="fa-solid fa-pen-to-square"></i></button>
+                    <button data-todo-id="${todoItem.id}"  data-bs-toggle="modal" data-bs-target="#updateTodoItemModal" class="btn btn-warning update-todo-item"><i class="fa-solid fa-pen-to-square"></i></button>
                 </td>
             </tr>
             `
         }
+        console.log('rendered');
         this.launchDeleteEvent()
+        this.launchIsFinishedEvent()
+        this.launchUpdateEvent()
     }
 
     createTodoItem ({name, desc, date}) {
@@ -69,9 +72,61 @@ class TodoListManger {
         }
     }
 
+    launchIsFinishedEvent() {
+        const todoIsFinishedCheckboxs = document.querySelectorAll('.todoIsFinishedCheckbox')
+
+        for (const todoIsFinishedCheckbox of todoIsFinishedCheckboxs) {
+            todoIsFinishedCheckbox.addEventListener('change', e => {
+                const isFinished = todoIsFinishedCheckbox.checked
+                const todoItemId = +todoIsFinishedCheckbox.dataset.todoId
+                this.changeIsFinished(isFinished, todoItemId)
+            })
+        }
+    }
+
+    launchUpdateEvent() {
+        const updateTodoItemButtons = document.querySelectorAll('.update-todo-item')
+        for (const updateTodoItemButton of updateTodoItemButtons) {
+            updateTodoItemButton.addEventListener('click', e => {
+                const updateTodoItemForm = document.forms.updateTodoItemForm
+                const todoItemId = +updateTodoItemButton.dataset.todoId 
+                const todoItem = this.todoItems.find(item => item.id === todoItemId)
+                updateTodoItemForm.name.value = todoItem.name
+                updateTodoItemForm.desc.value = todoItem.desc
+                updateTodoItemForm.date.value = todoItem.date.slice(0, 10)
+                updateTodoItemForm.setAttribute('data-todo-id', todoItem.id)
+            })
+        }
+    }
+
     searchTodoItems(value) {
         const result = this.todoItems.filter(item => item.name.includes(value) || item.desc.includes(value))
         this.render(result)
+    }
+
+    changeIsFinished(value, todoItemId) {
+        this.todoItems.map(item => {
+            if (todoItemId === item.id) {
+                item.isFinished = value
+            }
+            return item
+        })
+        localStorage.setItem('todoItems', JSON.stringify(this.todoItems))
+    }
+
+    updateTodoItem(todoItemId, data) {
+        this.todoItems.map(item => {
+            if (item.id === todoItemId) {
+                console.log(item);
+                item.name = data.name
+                item.desc = data.desc
+                item.date = data.date.toISOString()
+            }
+            return item
+        })
+        console.log(this.todoItems);
+        localStorage.setItem('todoItems', JSON.stringify(this.todoItems))
+        this.render(this.todoItems)
     }
 
 }
@@ -102,9 +157,6 @@ const start = () => {
         createTodoForm.reset()
     })
 
-    // Delete Todo Item
-
-    manager.launchDeleteEvent()
 
     // Search Todo Items
     const searchInput = document.querySelector('#search-input')
@@ -114,6 +166,21 @@ const start = () => {
         manager.searchTodoItems(value)
     })
 
+    // Update Todo Item by Form
+    const updateTodoItemForm = document.forms.updateTodoItemForm
+
+    updateTodoItemForm.addEventListener('submit', e => {
+        e.preventDefault()
+        const updateTodoItemModal = bootstrap.Modal.getInstance(document.getElementById('updateTodoItemModal'))
+        const name = updateTodoItemForm.name.value
+        const desc = updateTodoItemForm.desc.value
+        const date = new Date(updateTodoItemForm.date.value)
+        const todoId = +updateTodoItemForm.dataset.todoId
+        manager.updateTodoItem(todoId, {name, desc, date})
+
+        updateTodoItemModal.hide()
+        updateTodoItemForm.reset()
+    })
 }
 
 
